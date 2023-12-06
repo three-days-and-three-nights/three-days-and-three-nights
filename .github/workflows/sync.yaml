@@ -1,0 +1,30 @@
+name: Update Image
+
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+    
+
+jobs:
+  update-image:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@main
+
+    - name: Download new image
+      run: |
+        curl -o certs.svg https://certificate-mu-beige.vercel.app/certs_image?page=1&limit=20
+    - name: update image to repository
+      run: |
+        git config --local user.email "1692565761@qq.com"
+        git config --local user.name "three-days-and-three-nights"
+        git add .
+        git commit -m "Update image"  
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: main
